@@ -1,0 +1,9 @@
+django==3.2.4
+pymysql
+djangorestframework
+djangorestframework-jwt
+ldap3>=2.9
+django_python3_ldap
+httprunner
+django-filter==2.0.0
+six
