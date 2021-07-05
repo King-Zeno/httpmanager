@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_jwt',
     'django_filters',
+    'demo',
     'manager',
 ]
 
@@ -140,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ########### LDAP AUTH ###############
 if Config.AUTH_LDAP:
     AUTHENTICATION_BACKENDS = (
-        'django_auth_ldap3.backend.LDAPBackend',
+        'django_python3_ldap.auth.LDAPBackend',
         'django.contrib.auth.backends.ModelBackend',
     )
 
