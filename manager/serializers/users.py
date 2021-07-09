@@ -5,13 +5,11 @@ from rest_framework import serializers
 User = get_user_model()
 
 
-class UserSerializer(serializers.ListSerializer):
+class UserSerializer(serializers.ModelSerializer):
     last_login = serializers.DateTimeField(
         format="%Y-%m-%d %H:%M:%S", read_only=True)
     date_joined = serializers.DateTimeField(
         format="%Y-%m-%d %H:%M:%S", read_only=True)
-    password = serializers.CharField(
-        style={'input_type': 'password'}, label="密码", write_only=True, required=False)
 
     class Meta:
         model = User

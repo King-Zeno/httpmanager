@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_jwt',
+    'django_python3_ldap',
     'django_filters',
     'demo',
     'manager',
@@ -145,12 +146,14 @@ if Config.AUTH_LDAP:
         'django.contrib.auth.backends.ModelBackend',
     )
 
-    AUTH_LDAP_SERVER_URI = Config.LDAP['host']
-    AUTH_LDAP_BIND_DN = Config.LDAP['bind_dn']
-    AUTH_LDAP_BIND_PASSWORD = Config.LDAP['password']
-    AUTH_LDAP_BASE_DN = Config.LDAP['base_dn']
+    LDAP_AUTH_URL = Config.LDAP['host']
+    LDAP_AUTH_BIND_DN = Config.LDAP['bind_dn']
+    LDAP_AUTH_BIND_PASSWORD = Config.LDAP['password']
+    LDAP_AUTH_SEARCH_BASE = Config.LDAP['base_dn']
+    # The LDAP class that represents a user.
+    LDAP_AUTH_OBJECT_CLASS = "inetOrgPerson"
 
-    AUTH_LDAP_USER_ATTR_MAP = {
+    LDAP_AUTH_USER_FIELDS  = {
         "username": "uid",
         "first_name": "givenName",
         "last_name": "sn",

@@ -164,7 +164,6 @@ def jwt_payload_handler(user):
     username_field = get_username_field()
     username = get_username(user)
     fullname =  '%s%s' %(user.last_name,user.first_name)
-    user_perm = user.get_all_permissions()
 
     warnings.warn(
         'The following fields will be removed in the future: '
@@ -176,7 +175,6 @@ def jwt_payload_handler(user):
         'user_id': user.pk,
         'username': username,
         'fullname': fullname,
-        'user_perm': list(user_perm),
         'exp': datetime.utcnow() + api_settings.JWT_EXPIRATION_DELTA
     }
     if hasattr(user, 'email'):
