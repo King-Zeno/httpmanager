@@ -7,3 +7,4 @@ django_python3_ldap
 httprunner
 django-filter==2.4.0
 six
+drf-extensions

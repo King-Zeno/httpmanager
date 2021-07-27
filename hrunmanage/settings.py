@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'rest_framework_jwt',
     'django_python3_ldap',
     'django_filters',
-    'demo',
     'manager',
 ]
 
