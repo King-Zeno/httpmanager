@@ -3,14 +3,16 @@ from .base import BaseTable
 from .project import Project
 
 
-class EnvParam(BaseTable):
-    name = models.CharField(max_length=250, verbose_name='变量名称')
-    key = models.CharField(max_length=50, verbose_name='key')
-    value = models.CharField(max_length=250, verbose_name='value')
+class EnvParam(models.Model):
+    # 项目环境变量
+    name = models.CharField(max_length=100, verbose_name='变量名称')
+    base_url = models.CharField(max_length=200, verbose_name='base url')
+    headers = models.JSONField(default=dict, null=True, verbose_name='公共头')
+    variables = models.JSONField(default=dict, null=True, verbose_name='公共参数')
 
     class Meta:
         verbose_name = "环境变量"
-        db_table = 'env_param'
+        db_table = 'env'
 
 
 class ProjectEnv(models.Model):

@@ -12,12 +12,6 @@ from .env import EnvParamSerializer
 class ProjectEnvSerializer(serializers.ModelSerializer):
     env = EnvParamSerializer()
 
-    def create(self, validated_data):
-        env = EnvParam.objects.create(
-            name=validated_data['env']['name'], key=validated_data['env']['key'], value=validated_data['env']['value'])
-        ProjectEnv.objects.create(project=validated_data['project'], env=env)
-        return validated_data
-
     class Meta:
         validators = [
             UniqueTogetherValidator(
@@ -27,6 +21,21 @@ class ProjectEnvSerializer(serializers.ModelSerializer):
             )]
         model = ProjectEnv
         fields = ['id', 'project', 'env']
+
+    def create(self, validated_data):
+        print(validated_data)
+        env = EnvParam.objects.create(**(validated_data['env']))
+        ProjectEnv.objects.create(project=validated_data['project'], env=env)
+        return validated_data
+
+    def update(self, instance, validated_data):
+        env_obj = instance.env
+        env_obj.name = validated_data['env']['name']
+        env_obj.base_url = validated_data['env']['base_url']
+        env_obj.headers = validated_data['env']['headers']
+        env_obj.variables = validated_data['env']['variables']
+        env_obj.save()
+        return super().update(instance, validated_data)
 
 
 class ProjectSerializer(serializers.ModelSerializer):

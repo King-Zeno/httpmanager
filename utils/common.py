@@ -1,26 +1,17 @@
-
-import six
-from rest_framework import viewsets
-from rest_framework import status
-from rest_framework import serializers
-from rest_framework.response import Response
-from rest_framework.serializers import Serializer
-from rest_framework import filters
-from django_filters import rest_framework
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.views import exception_handler
-from utils.page import CustomPagination
-
 import uuid
 import warnings
-
-from django.contrib.auth import get_user_model
-
 from calendar import timegm
 from datetime import datetime
 
-from rest_framework_jwt.compat import get_username
-from rest_framework_jwt.compat import get_username_field
+import six
+from django.contrib.auth import get_user_model
+from django_filters import rest_framework
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, serializers, status, viewsets
+from rest_framework.response import Response
+from rest_framework.serializers import Serializer
+from rest_framework.views import exception_handler
+from rest_framework_jwt.compat import get_username, get_username_field
 from rest_framework_jwt.settings import api_settings
 
 
