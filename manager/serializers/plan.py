@@ -6,5 +6,4 @@ class PlanParamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plan
         # fields = '__all__'
-        exclude = ['create_time','update_time']
-
+        exclude = ['create_time', 'update_time']
