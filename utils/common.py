@@ -7,7 +7,7 @@ import six
 from django.contrib.auth import get_user_model
 from django_filters import rest_framework
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, serializers, status, viewsets
+from rest_framework import filters, permissions, serializers, status, viewsets
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 from rest_framework.views import exception_handler
@@ -58,7 +58,7 @@ class CustomListViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = ''
     serializer_class = ''
-    permission_classes = ()
+    permission_classes = (permissions.IsAuthenticated,)
     filter_fields = ()
     search_fields = ()
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter,)
@@ -79,7 +79,7 @@ class CustomListViewSet(viewsets.ReadOnlyModelViewSet):
 class CustomViewBase(viewsets.ModelViewSet):
     queryset = ''
     serializer_class = ''
-    permission_classes = ()
+    permission_classes = (permissions.IsAuthenticated,)
     filter_fields = ()
     search_fields = ()
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter,)

@@ -7,13 +7,13 @@ from .env import EnvParam
 class Api(BaseTable):
 
     METHOD = (
-        ('GET', 'GET'),
-        ('POST', 'POST'),
-        ('PUT', 'PUT'),
-        ('DELETE', 'DELETE'),
-        ('PATCH', 'PATCH'),
-        ('HEAD', 'HEAD'),
-        ('OPTIONS', 'OPTIONS')
+        ('get', 'GET'),
+        ('post', 'POST'),
+        ('put', 'PUT'),
+        ('delete', 'DELETE'),
+        ('patch', 'PATCH'),
+        ('head', 'HEAD'),
+        ('options', 'OPTIONS')
     )
 
     project = models.ForeignKey(Project, related_name='project_api',
