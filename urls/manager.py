@@ -3,7 +3,7 @@ from django.urls import path, re_path
 from rest_framework.routers import DefaultRouter
 from rest_framework_extensions.routers import ExtendedDefaultRouter
 
-from manager.views import project, env, api, plan, plancase, case
+from manager.views import project, env, api, plan, case
 
 router = ExtendedDefaultRouter()
 project_router = router.register(r'project', project.ProjectViewSet, basename='project')
@@ -15,7 +15,6 @@ router.register('case', case.TestCaseViewSet, basename='case').register(
 
 router.register('env', env.EnvParamViewSet, basename='env')
 router.register('plan', plan.PlanParamViewSet, basename='plan')
-router.register('plan_case', plancase.PlanCaseParamViewSet, basename='plan_case')
 
 
 urlpatterns = [
