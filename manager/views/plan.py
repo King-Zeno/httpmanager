@@ -7,7 +7,7 @@ from manager.serializers.plan import PlanParamSerializer, TestPlanListSerializer
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from django.http import HttpResponse
 
-class PlanParamViewSet(NestedViewSetMixin, CustomViewBase):
+class PlanParamViewSet(CustomViewBase):
     model = Plan
     queryset = Plan.objects.all()
     serializer_class = PlanParamSerializer
