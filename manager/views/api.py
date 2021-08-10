@@ -15,7 +15,7 @@ class ApiViewSet(NestedViewSetMixin, CustomViewBase):
 
     def create(self, request, *args, **kwargs):
         username = "%s%s" % (request.user.last_name, request.user.first_name)
-        data = request.data
+        data = request.data.copy()
         data['author'] = username
         serializer = self.get_serializer(data=data)
         is_valid = serializer.is_valid(raise_exception=True)
@@ -28,7 +28,7 @@ class ApiViewSet(NestedViewSetMixin, CustomViewBase):
     @action(methods=['get'], detail=True)
     def run(self, request, *args, **kwargs):
         object = self.get_object()
-        env = request.GET.get('env')
+        env = request.GET.get('env').copy()
         data = RunApi.run(self, env, object.id)
 
         return Response(data, status=status.HTTP_200_OK)

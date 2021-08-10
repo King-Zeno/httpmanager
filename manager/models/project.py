@@ -8,4 +8,3 @@ class Project(BaseTable):
     class Meta:
         verbose_name = "项目"
         db_table = 'project'
-    

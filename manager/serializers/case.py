@@ -17,7 +17,7 @@ class TestCaseSerializer(serializers.ModelSerializer):
 
 
 class TestCaseListSerializer(serializers.ModelSerializer):
-    case_step = TestStepSerializer(many=True, required=False)
+    case_step = TestStepSerializer(many=True, required=False)            #返回结果集
     project_name = serializers.CharField(source='project.name', read_only=True)
 
     class Meta:
