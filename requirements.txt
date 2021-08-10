@@ -4,7 +4,7 @@ djangorestframework
 djangorestframework-jwt
 ldap3>=2.9
 django_python3_ldap
-httprunner
+httprunner==2.5.7
 django-filter==2.4.0
 six
 drf-extensions

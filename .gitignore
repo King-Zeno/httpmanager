@@ -107,3 +107,4 @@ config.py
 .vscode/
 .idea/
 testcase/
+report/
