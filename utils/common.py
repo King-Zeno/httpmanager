@@ -52,7 +52,7 @@ class JsonResponse(Response):
                 self[name] = value
 
 
-class CustomListViewSet(viewsets.ReadOnlyModelViewSet):
+class CustomListViewSet(viewsets.ReadOnlyModelViewSet):#只读
     """
     List a queryset.
     """
