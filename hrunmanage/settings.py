@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'manager',
 ]
 
+if DEBUG:
+    INSTALLED_APPS.append('coreapi')
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -236,6 +239,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'utils.page.CustomPagination',
     # 'PAGE_SIZE': 20
     'EXCEPTION_HANDLER':'utils.common.custom_exception_handler', #使用自定义异常处理
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 # JWT 相关配置

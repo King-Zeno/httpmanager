@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import re_path
 from django.conf.urls import include
+from rest_framework.documentation import include_docs_urls
+from hrunmanage import settings
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -24,3 +26,5 @@ urlpatterns = [
     path('user/', include('urls.users')),
     path('manager/', include('urls.manager')),
 ]
+if settings.DEBUG:
+    urlpatterns.append(path('docs/', include_docs_urls(title="hrunmanager")))
