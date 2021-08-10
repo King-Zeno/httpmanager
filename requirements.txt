@@ -8,3 +8,4 @@ httprunner==2.5.7
 django-filter==2.4.0
 six
 drf-extensions
+coreapi
