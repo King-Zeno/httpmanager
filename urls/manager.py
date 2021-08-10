@@ -11,7 +11,7 @@ project_router.register(r'env', project.ProjectEnvViewSet, basename='project-env
 project_router.register('api', api.ApiViewSet, basename='project-api',parents_query_lookups=['project'])
 
 router.register('case', case.TestCaseViewSet, basename='case').register(
-    'step', case.TestStepViewSet, basename='case-step', parents_query_lookups='case_step')
+    'step', case.TestStepViewSet, basename='case-step', parents_query_lookups=['case_step'])
 
 router.register('env', env.EnvParamViewSet, basename='env')
 router.register('plan', plan.PlanParamViewSet, basename='plan')
