@@ -252,3 +252,14 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA':  datetime.timedelta(days=7),
 
 }
+
+# celery
+CELERY_BROKER_URL = 'redis://:%s@%s:%s/%s' % (Config.REDIS['password'], Config.REDIS['host'], Config.REDIS['port'], Config.REDIS['db'])
+CELERY_RESULT_BACKEND = 'redis://:%s@%s:%s/%s' % (Config.REDIS['password'], Config.REDIS['host'], Config.REDIS['port'], Config.REDIS['db'])
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_ENABLE_UTC = False
+CELERY_TIMEZONE = TIME_ZONE
+DJANGO_CELERY_BEAT_TZ_AWARE = False 

@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from utils.common import CustomViewBase, JsonResponse
 from rest_framework import filters
+from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 from manager.models.plan import Plan, PlanCase
 from manager.serializers.plan import (
@@ -11,6 +12,7 @@ from manager.serializers.plan import (
 )
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from utils.common import JsonResponse
+from utils.runner import run_plan
 
 
 class PlanViewSet(CustomViewBase):
@@ -36,6 +38,17 @@ class PlanViewSet(CustomViewBase):
 
         self.perform_create(serializer)
         return JsonResponse(code=200, msg="success", data=serializer.data)
+    
+    @action(methods=['get'],detail=True)
+    def run(self, request, *args, **kwargs):
+        object = self.get_object()
+        # env = request.data['env']
+        env = request.GET.get('env')
+        
+        report_path = run_plan(object.id, env)
+
+        return JsonResponse(code=200, data=report_path)
+
 
 
 class PlanCaseViewSet(NestedViewSetMixin, CustomViewBase):

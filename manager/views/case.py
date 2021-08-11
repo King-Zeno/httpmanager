@@ -1,3 +1,4 @@
+from manager.models.report import Report
 from rest_framework.response import Response
 from utils.common import CustomViewBase, JsonResponse
 from rest_framework.decorators import action
@@ -25,7 +26,7 @@ class TestCaseViewSet(CustomViewBase):
         # env = request.data['env']
         env = request.GET.get('env')
         
-        report_path = RunTestCase().run_case(project=object.project.name, env=env, case_id=object.id)
+        report_path = RunTestCase().run_case(env=env, case_id=object.id)
 
         return JsonResponse(code=200, data=report_path)
 

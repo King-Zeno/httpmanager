@@ -9,3 +9,5 @@ django-filter==2.4.0
 six
 drf-extensions
 coreapi
+celery==5.1.2
+redis

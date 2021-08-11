@@ -5,16 +5,20 @@ import json
 import os
 import shutil
 import time
+from httprunner import report
 
 import requests
 from config import LOG_DIR, Config
 from hrunmanage import settings
 from httprunner import logger
 from httprunner.api import HttpRunner
-from httprunner.report import gen_html_report, get_summary
+from httprunner.report import gen_html_report
+from celery import shared_task
 from manager.models.api import Api
-from manager.models.case import TestCase, TestStep
+from manager.models.case import TestCase
 from manager.models.env import EnvParam
+from manager.models.report import Report
+from manager.models.plan import Plan, PlanCase
 from manager.serializers.case import TestCaseListSerializer
 
 
@@ -49,11 +53,12 @@ class RunTestCase(object):
     log_path = LOG_DIR
     log_level = Config.LEVEL
 
-    def json_fromat(self, env, case_id):
+    def json_format(self, env, case_id):
         """ 格式化成 testcase json格式 """
 
         instance = TestCase.objects.get(pk=case_id)
         serializer = TestCaseListSerializer(instance=instance)
+        project = instance.project.name
 
         test_case = {}
         test_case['config'] = {}
@@ -68,11 +73,19 @@ class RunTestCase(object):
         for key in list(test_case['config'].keys()):
             if not test_case['config'].get(key):
                 del test_case['config'][key]
-
+        
         for step in serializer.data['case_step']:
             del step['id']
             del step['sort']
             del step['case']
+
+            # 用例引用
+            if step['testcase']:
+                case_id = step['testcase']
+                data = self.json_format(env, case_id)
+                # testcase_path, json_file = self.dump_json_file(project, data)
+
+                step['testcase'] = data
 
             for key in list(step.keys()):
                 if not step.get(key):
@@ -90,13 +103,13 @@ class RunTestCase(object):
         if not os.path.exists(testcase_path):
             os.mkdir(testcase_path)
 
-        json_file = os.path.join(testcase_path, time.strftime("%Y%m%d") + ".json")
+        json_file = os.path.join(testcase_path, data['config']['name'] + "-" + time.strftime("%Y%m%d") + ".json")
 
         with io.open(json_file, 'w', encoding='utf-8') as stream:
             json.dump(data, stream, indent=4, separators=(
                 ',', ': '), ensure_ascii=False)
 
-        return testcase_path
+        return testcase_path, json_file
 
     def add_test_reports(self, summary, report_name=None):
         """
@@ -124,13 +137,15 @@ class RunTestCase(object):
 
         return report_file
 
-    def run_case(self, project, env, case_id):
+    def run_case(self, env, case_id):
         """ 
         执行用例
         """
+        case_obj = TestCase.objects.get(pk=case_id)
+        project = case_obj.project.name
 
-        testcase = self.json_fromat(env, case_id)
-        testcase_path = self.dump_json_file(project, testcase)
+        testcase = self.json_format(env, case_id)
+        testcase_path, json_file = self.dump_json_file(project, testcase)
 
         if not os.path.exists(self.log_path):
             os.mkdir(self.log_path)
@@ -146,8 +161,74 @@ class RunTestCase(object):
         runner = HttpRunner(**kwargs)
         summary = runner.run(testcase_path)
 
+        report_path = self.add_test_reports(summary, report_name=case_obj.name)
+        report_path = report_path.replace('\\','/')
+
+        # 保存到数据库
+        report_obj = Report.objects.filter(case=case_obj, path=report_path).first()
+        if report_obj:
+            report_obj.path = report_path
+            report_obj.save()
+        else:
+            Report.objects.create(
+                name = case_obj.name,
+                path = report_path,
+                case = case_obj
+            )
+            
+
         # 删除生成的工程目录
         shutil.rmtree(testcase_path)
-        report_path = self.add_test_reports(summary, report_name=project)
 
         return report_path
+
+
+@shared_task()
+def run_plan(plan_id, env):
+    """ 
+    异步执行计划 
+        plan_id    计划ID
+        env        ENV ID
+    """
+
+    log_path = LOG_DIR
+    log_level = Config.LEVEL
+    log_file = os.path.join(log_path, "runner.log")
+
+    plan_obj = Plan.objects.get(pk=plan_id)
+    plan_case= PlanCase.objects.filter(plan=plan_id)
+    project = plan_obj.project.name
+
+    for case in plan_case:
+        testcase = RunTestCase().json_format(env, case.id)
+        testcase_path, json_file = RunTestCase().dump_json_file(project, testcase)
+    
+    logger.setup_logger(log_level, log_file)
+
+    kwargs = {
+        "failfast": False,
+        "log_level": log_level,
+        "log_file": log_file
+    }
+    runner = HttpRunner(**kwargs)
+    summary = runner.run(testcase_path)
+
+    # 删除生成的工程目录
+    shutil.rmtree(testcase_path)
+    report_path = RunTestCase().add_test_reports(summary, report_name=plan_obj.name)
+    report_path = report_path.replace('\\','/')
+
+    # 保存到数据库
+    report_obj = Report.objects.filter(plan=plan_id, path=report_path).first()
+    
+    if  report_obj:
+        report_obj.path = report_path
+        report_obj.save()
+    else:
+        Report.objects.create(
+            name = plan_obj.name,
+            path = report_path,
+            plan = plan_obj
+        )
+
+    return report_path
