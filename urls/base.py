@@ -21,10 +21,9 @@ from rest_framework.documentation import include_docs_urls
 from hrunmanage import settings
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('user/', include('urls.users')),
-    path('manager/', include('urls.manager')),
+    path('', include('urls.manager')),
 ]
 if settings.DEBUG:
-    urlpatterns.append(path('docs/', include_docs_urls(title="hrunmanager")))
+    urlpatterns.append(path('docs/', include_docs_urls(title="Api Docs")))
