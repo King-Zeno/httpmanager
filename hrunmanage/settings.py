@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework_jwt',
     'django_python3_ldap',
     'django_filters',
+    'corsheaders',   # drf 跨域配置
     'manager',
 ]
 
@@ -50,6 +51,8 @@ if DEBUG:
     INSTALLED_APPS.append('coreapi')
 
 MIDDLEWARE = [
+    # 跨域配置
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
