@@ -29,6 +29,9 @@ DEBUG = Config.DEBUG
 
 ALLOWED_HOSTS = Config.ALLOWED_HOSTS
 
+# 允许所有跨域请求
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 # Application definition
 

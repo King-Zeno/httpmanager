@@ -83,9 +83,9 @@ class RunTestCase(object):
             if step['testcase']:
                 case_id = step['testcase']
                 data = self.json_format(env, case_id)
-                # testcase_path, json_file = self.dump_json_file(project, data)
+                testcase_path, json_file = self.dump_json_file(project, data)
 
-                step['testcase'] = data
+                step['testcase'] = json_file
 
             for key in list(step.keys()):
                 if not step.get(key):
@@ -211,7 +211,7 @@ def run_plan(plan_id, env):
         "log_file": log_file
     }
     runner = HttpRunner(**kwargs)
-    summary = runner.run(testcase_path)
+    summary = runner.run_path(testcase_path)
 
     # 删除生成的工程目录
     shutil.rmtree(testcase_path)

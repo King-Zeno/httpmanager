@@ -41,6 +41,9 @@ class PlanViewSet(CustomViewBase):
     
     @action(methods=['get'],detail=True)
     def run(self, request, *args, **kwargs):
+        """
+        get /?env=pk  环境变量
+        """
         object = self.get_object()
         # env = request.data['env']
         env = request.GET.get('env')
