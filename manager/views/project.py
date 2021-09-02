@@ -1,8 +1,10 @@
 from utils.common import CustomViewBase, JsonResponse
 from rest_framework import filters, permissions
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import action
 from manager.models.project import Project
 from manager.models.env import ProjectEnv
+from manager.models.api import Api
 from manager.serializers.project import ProjectSerializer, ProjectEnvSerializer
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
@@ -12,6 +14,11 @@ class ProjectViewSet(NestedViewSetMixin, CustomViewBase):
     serializer_class = ProjectSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     permission_classes = (permissions.IsAuthenticated,)
+
+    @action(methods=['get'], detail=False)
+    def method(self, request, *args, **kwargs):
+        data = Api.METHOD
+        return JsonResponse(code=200, data=data)
 
 
 class ProjectEnvViewSet(NestedViewSetMixin, CustomViewBase):
