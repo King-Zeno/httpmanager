@@ -12,3 +12,4 @@ coreapi
 celery==5.1.2
 redis
 django-cors-headers
+cryptography

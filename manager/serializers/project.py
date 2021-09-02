@@ -23,7 +23,6 @@ class ProjectEnvSerializer(serializers.ModelSerializer):
         fields = ['id', 'project', 'env']
 
     def create(self, validated_data):
-        print(validated_data)
         env = EnvParam.objects.create(**(validated_data['env']))
         ProjectEnv.objects.create(project=validated_data['project'], env=env)
         return validated_data
@@ -35,7 +34,7 @@ class ProjectEnvSerializer(serializers.ModelSerializer):
         env_obj.headers = validated_data['env']['headers']
         env_obj.variables = validated_data['env']['variables']
         env_obj.save()
-        return super().update(instance, validated_data)
+        return validated_data
 
 
 class ProjectSerializer(serializers.ModelSerializer):

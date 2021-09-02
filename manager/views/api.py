@@ -15,7 +15,11 @@ class ApiViewSet(NestedViewSetMixin, CustomViewBase):
 
     def create(self, request, *args, **kwargs):
         username = "%s%s" % (request.user.last_name, request.user.first_name)
-        data = request.data.dict()
+        try:
+            data = request.data.dict()
+        except:
+            data = request.data
+        
         data['author'] = username
         serializer = self.get_serializer(data=data)
         is_valid = serializer.is_valid(raise_exception=True)
