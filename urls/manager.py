@@ -18,10 +18,13 @@ router.register(r'plan',
               basename='plan-case',
               parents_query_lookups=['plan'])
 
-router.register('case', case.TestCaseViewSet, basename='case').register(
-    'step', case.TestStepViewSet, basename='case-step', parents_query_lookups=['case_step'])
+router.register('case', case.TestCaseViewSet, basename='case').\
+    register('step',
+             case.TestStepViewSet,
+             basename='case-step',
+             parents_query_lookups=['case_step'])
 
-router.register('env', env.EnvParamViewSet, basename='env')
+#router.register('env', env.EnvParamViewSet, basename='env')
 router.register('report', report.ReportViewSet, basename='report')
 
 

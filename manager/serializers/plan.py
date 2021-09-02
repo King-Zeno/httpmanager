@@ -19,7 +19,7 @@ class PlanCaseListSerializer(serializers.ModelSerializer):
 
 
 class PlanSerializer(serializers.ModelSerializer):
-
+    project_name = serializers.CharField(source='project.name', read_only=True)
     class Meta:
         model = Plan
         fields = '__all__'

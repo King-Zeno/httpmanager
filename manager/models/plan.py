@@ -2,6 +2,7 @@ from django.db import models
 from .base import BaseTable
 from .project import Project
 from .case import TestCase
+from django.contrib.auth import get_user_model
 
 
 class Plan(BaseTable):
@@ -11,15 +12,20 @@ class Plan(BaseTable):
     project = models.ForeignKey(Project, related_name='project_plan',
                                 null=True, blank=True, on_delete=models.SET_NULL, db_constraint=False, verbose_name='项目id')
     author = models.CharField(max_length=50, verbose_name='创建人')
+    partner = models.JSONField(null=True, verbose_name='关联人')
+    project_name = models.CharField( max_length=50, verbose_name='项目名称')
 
     class Meta:
         verbose_name = "测试计划"
         db_table = 'plan'
 
+#防止关联外键无法删除 on_delete=models.SET(get_sentinel_user)
+def get_sentinel_user():
+        return get_user_model().objects.get_or_create(username='deleted')[0]
 
 class PlanCase(models.Model):
     plan = models.ForeignKey(Plan, related_name='plan_case',
-                             on_delete=models.RESTRICT, db_constraint=False, verbose_name='关联计划')
+                            db_constraint=False, verbose_name='关联计划', on_delete=models.SET(get_sentinel_user),)
     case = models.ForeignKey(TestCase, related_name='case_testcase',
                              on_delete=models.RESTRICT, db_constraint=False, verbose_name='测试用例')
 
