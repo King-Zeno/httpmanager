@@ -6,12 +6,14 @@ from utils.common import CustomListViewSet, JsonResponse
 from rest_framework.decorators import action
 from manager.models.report import Report
 from manager.serializers.report import ReportSerializer
+from utils.filter import ReportFilter
 
 
 class ReportViewSet(CustomListViewSet):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    filterset_class = ReportFilter
 
     def destroy(self, request, *args, **kwargs):
         object = self.get_object()

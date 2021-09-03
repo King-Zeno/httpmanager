@@ -9,11 +9,15 @@ from manager.serializers.case import (
     TestCaseListSerializer
 )
 from rest_framework_extensions.mixins import NestedViewSetMixin
+from django_filters.rest_framework import DjangoFilterBackend
 from utils.runner import RunTestCase
+from utils.filter import TestCaseFilter
 
 
 class TestCaseViewSet(CustomViewBase):
     queryset = TestCase.objects.all()
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TestCaseFilter
 
     def get_serializer_class(self):
         if self.action == 'retrieve':

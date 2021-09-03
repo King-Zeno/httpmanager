@@ -3,6 +3,8 @@ from manager.models.report import Report
 from rest_framework.validators import UniqueTogetherValidator
 
 class ReportSerializer(serializers.ModelSerializer):
+    case_name = serializers.CharField(source='case.name', read_only=True)
+    plan_name = serializers.CharField(source='plan.name', read_only=True)
 
     class Meta:
         validators = [

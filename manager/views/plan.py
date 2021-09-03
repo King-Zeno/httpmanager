@@ -13,6 +13,7 @@ from manager.serializers.plan import (
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from utils.common import JsonResponse
 from utils.runner import run_plan
+from utils.filter import PlanFilter
 
 
 class PlanViewSet(CustomViewBase):
@@ -20,6 +21,7 @@ class PlanViewSet(CustomViewBase):
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    filterset_class = PlanFilter
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
