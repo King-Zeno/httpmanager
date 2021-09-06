@@ -202,7 +202,8 @@ def custom_exception_handler(exc, context):
         
         if response.status_code == 400:
             try:
-                msg = []
+                msg = []                
+                print(response.data)
                 for i in response.data:
                     msg.append("%s: %s" %(i, response.data[i][0]))
                 response.data['msg'] = msg

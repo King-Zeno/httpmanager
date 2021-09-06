@@ -29,10 +29,15 @@ class RunApi(object):
         env_obj = EnvParam.objects.get(pk=env)
         url = '%s%s' % (env_obj.base_url, api_obj.url)
         method = api_obj.method
-        headers = env_obj.headers
-        headers['Content-Type'] = 'application/json'
-        params = api_obj.body['params']
-        data = api_obj.body['data']
+        headers = {**dict(env_obj.headers), **dict(api_obj.headers)}
+        headers["Content-Type"] = "application/json"
+        
+        if method == 'get':
+            params = api_obj.body
+        else:
+            params = {}
+        # params = api_obj.body['params']
+        data = api_obj.body
 
         r = requests.request(method, url, headers=headers,
                              params=params, json=data, timeout=5)
