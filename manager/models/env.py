@@ -18,9 +18,9 @@ class EnvParam(models.Model):
 class ProjectEnv(models.Model):
     # db_constraint=False 仅在代码层实现关联，数据库不生成外键
     project = models.ForeignKey(Project, 
-                related_name='project_env', on_delete=models.RESTRICT, db_constraint=False, verbose_name='关联项目')
+                related_name='project_env', on_delete=models.CASCADE, db_constraint=False, verbose_name='关联项目')
     env = models.ForeignKey(EnvParam,
-                related_name='env_param',on_delete=models.RESTRICT, db_constraint=False, verbose_name='关联环境变量')
+                related_name='env_param',on_delete=models.CASCADE, db_constraint=False, verbose_name='关联环境变量')
 
     class Meta:
         verbose_name = "项目对应环境"
