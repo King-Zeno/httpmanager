@@ -19,13 +19,9 @@ class Plan(BaseTable):
         verbose_name = "测试计划"
         db_table = 'plan'
 
-#防止关联外键无法删除 on_delete=models.SET(get_sentinel_user)
-def get_sentinel_user():
-        return get_user_model().objects.get_or_create(username='deleted')[0]
-
 class PlanCase(models.Model):
     plan = models.ForeignKey(Plan, related_name='plan_case',
-                            db_constraint=False, verbose_name='关联计划', on_delete=models.SET(get_sentinel_user),)
+                            db_constraint=False, verbose_name='关联计划', on_delete=models.CASCADE,)
     case = models.ForeignKey(TestCase, related_name='case_testcase',
                              on_delete=models.RESTRICT, db_constraint=False, verbose_name='测试用例')
 
