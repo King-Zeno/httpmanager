@@ -7,9 +7,10 @@ from rest_framework.decorators import action
 from manager.models.report import Report
 from manager.serializers.report import ReportSerializer
 from utils.filter import ReportFilter
+from rest_framework_extensions.mixins import NestedViewSetMixin
 
 
-class ReportViewSet(CustomListViewSet):
+class ReportViewSet(NestedViewSetMixin, CustomListViewSet):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
