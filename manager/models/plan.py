@@ -13,7 +13,6 @@ class Plan(BaseTable):
                                 null=True, blank=True, on_delete=models.SET_NULL, db_constraint=False, verbose_name='项目id')
     author = models.CharField(max_length=50, verbose_name='创建人')
     partner = models.JSONField(null=True, verbose_name='关联人')
-    project_name = models.CharField( max_length=50, verbose_name='项目名称')
 
     class Meta:
         verbose_name = "测试计划"
