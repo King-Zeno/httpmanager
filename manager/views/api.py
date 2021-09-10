@@ -1,6 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from manager.models.api import Api
-from manager.serializers.api import ApiSerializer
+from manager.models.api import APICate, Api
+from manager.serializers.api import ApiSerializer, APICateSerializer
 from rest_framework.decorators import action
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from utils.common import CustomViewBase, JsonResponse
@@ -37,3 +37,10 @@ class ApiViewSet(NestedViewSetMixin, CustomViewBase):
         data = RunApi.run(self, env, object.id)
 
         return JsonResponse(code=200, data=data)
+
+class APICateViewSet(CustomViewBase):
+
+    queryset = APICate.objects.all();
+    serializer_class = APICateSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ['id','project']

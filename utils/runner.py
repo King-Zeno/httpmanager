@@ -2,6 +2,7 @@
 import datetime
 import io
 import json
+from manager.models.project import Project
 import os
 import shutil
 import time
@@ -14,7 +15,7 @@ from httprunner import logger
 from httprunner.api import HttpRunner
 from httprunner.report import gen_html_report
 from celery import shared_task
-from manager.models.api import Api
+from manager.models.api import Api, APICate
 from manager.models.case import TestCase
 from manager.models.env import EnvParam
 from manager.models.report import Report
@@ -237,3 +238,20 @@ def run_plan(plan_id, env):
         )
 
     return report_path
+
+
+# 导入接口数据
+def import_api(project_id, file_obj, author):
+    json_file = json.load(file_obj)
+    project = Project.objects.get(pk=project_id)
+    for cate in json_file:
+        cate_obj = APICate.objects.create(project=project, name=cate['name'])
+        for i in cate['list']:
+            Api.objects.create(
+                project = project,
+                cate = cate_obj,
+                name = i['title'],
+                method = i['method'].lower(),
+                url = i['path'],
+                author = author
+            )

@@ -14,7 +14,7 @@ class ApiFilter(FilterSet):
 
     class Meta:
         model = Api
-        fields = ['name']
+        fields = ['name','cate']
 
 
 class TestCaseFilter(FilterSet):

@@ -7,6 +7,7 @@ from manager.models.env import ProjectEnv
 from manager.models.api import Api
 from manager.serializers.project import ProjectSerializer, ProjectEnvSerializer
 from rest_framework_extensions.mixins import NestedViewSetMixin
+from utils.runner import import_api
 
 
 class ProjectViewSet(NestedViewSetMixin, CustomViewBase):
@@ -19,6 +20,18 @@ class ProjectViewSet(NestedViewSetMixin, CustomViewBase):
     def method(self, request, *args, **kwargs):
         data = Api.METHOD
         return JsonResponse(code=200, data=data)
+
+    @action(methods=['post'], detail=True)
+    def upload(self, request, *args, **kwargs):
+        author = "%s%s" % (request.user.last_name, request.user.first_name)
+        object = self.get_object()
+        file_obj = request.FILES.get('file', None)
+        try:
+            import_api(object.id, file_obj, author)
+            return JsonResponse(code=200, msg="导入成功")
+        except Exception as e:
+            print(e)
+            return JsonResponse(code=502, msg="导入失败")
 
 
 class ProjectEnvViewSet(NestedViewSetMixin, CustomViewBase):

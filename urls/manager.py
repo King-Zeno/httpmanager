@@ -20,6 +20,7 @@ case_router.register('report', report.ReportViewSet, basename='case-report', par
 
 router.register('env', env.EnvParamViewSet, basename='env')
 router.register('report', report.ReportViewSet, basename='report')
+router.register('cate', api.APICateViewSet, basename='cate')
 
 
 urlpatterns = [
