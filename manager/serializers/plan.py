@@ -1,4 +1,6 @@
 from rest_framework import fields, serializers
+from rest_framework.exceptions import ValidationError
+from rest_framework.validators import UniqueTogetherValidator
 from manager.models.plan import Plan, PlanCase
 from .case import TestCaseListSerializer
 
@@ -8,6 +10,13 @@ class PlanCaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlanCase
         fields = '__all__'
+        validators = [
+            UniqueTogetherValidator(
+                queryset=PlanCase.objects.all(),
+                fields=['plan', 'case'],
+                message='该计划已存在相同的测试用例'
+            )
+        ]
 
 
 class PlanCaseListSerializer(serializers.ModelSerializer):
@@ -16,7 +25,6 @@ class PlanCaseListSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlanCase
         fields = '__all__'
-
 
 class PlanSerializer(serializers.ModelSerializer):
     project_name = serializers.CharField(source='project.name', read_only=True)
