@@ -29,7 +29,7 @@ class PlanViewSet(CustomViewBase):
         return PlanSerializer
 
     def create(self, request, *args, **kwargs):
-        data = request.data.dict()
+        data = request.data
         username = "%s%s" % (request.user.last_name, request.user.first_name)
         data['author'] = username
 
@@ -64,3 +64,19 @@ class PlanCaseViewSet(NestedViewSetMixin, CustomViewBase):
         if self.action == 'retrieve':
             return PlanCaseListSerializer
         return PlanCaseSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            data = request.data.dict()
+        except:
+            data = request.data
+        for i in data['case']:
+            data['case'] = i
+            serializer = self.get_serializer(data=data)
+            is_valid = serializer.is_valid(raise_exception=True)
+            if not is_valid:
+                return JsonResponse(code=400, msg=serializer.errors)
+
+            self.perform_create(serializer)
+        return JsonResponse(code=200, msg="success",)
+
