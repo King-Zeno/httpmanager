@@ -243,7 +243,7 @@ REST_FRAMEWORK = {
     ),
     # 默认分页设置
     'DEFAULT_PAGINATION_CLASS': 'utils.page.CustomPagination',
-    # 'PAGE_SIZE': 20
+    # 'PAGE_SIZE': 20,
     'EXCEPTION_HANDLER':'utils.common.custom_exception_handler', #使用自定义异常处理
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }

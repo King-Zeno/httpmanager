@@ -29,7 +29,7 @@ class RunApi(object):
         api_obj = Api.objects.get(pk=api_id)
         env_obj = EnvParam.objects.get(pk=env)
         url = '%s%s' % (env_obj.base_url, api_obj.url)
-        method = api_obj.method
+        method = api_obj.method.lower()
         headers = {**dict(env_obj.headers), **dict(api_obj.headers)}
         headers["Content-Type"] = "application/json"
         
@@ -251,7 +251,7 @@ def import_api(project_id, file_obj, author):
                 project = project,
                 cate = cate_obj,
                 name = i['title'],
-                method = i['method'].lower(),
+                method = i['method'],
                 url = i['path'],
                 author = author
             )

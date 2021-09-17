@@ -19,13 +19,13 @@ class APICate(models.Model):
 class Api(BaseTable):
 
     METHOD = (
-        ('get', 'GET'),
-        ('post', 'POST'),
-        ('put', 'PUT'),
-        ('delete', 'DELETE'),
-        ('patch', 'PATCH'),
-        ('head', 'HEAD'),
-        ('options', 'OPTIONS')
+        ('GET', 'GET'),
+        ('POST', 'POST'),
+        ('PUT', 'PUT'),
+        ('DELETE', 'DELETE'),
+        ('PATCH', 'PATCH'),
+        ('HEAD', 'HEAD'),
+        ('OPTIONS', 'OPTIONS')
     )
 
     project = models.ForeignKey(Project, related_name='project_api',
