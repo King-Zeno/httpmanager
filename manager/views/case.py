@@ -1,5 +1,5 @@
-from manager.models.report import Report
-from rest_framework.response import Response
+import os,io
+from rest_framework.views import APIView
 from utils.common import CustomViewBase, JsonResponse
 from rest_framework.decorators import action
 from manager.models.case import TestStep,TestCase
@@ -46,3 +46,29 @@ class TestStepViewSet(NestedViewSetMixin, CustomViewBase):
         queryset = TestStep.objects.filter(case=case_id)
 
         return queryset
+
+
+class TestCaseEnvView(APIView):
+
+    def get(self, request, *args):
+        data = ""
+        env_file = "testcase/.env"
+        try:
+            with open(env_file, 'r', encoding='utf-8') as stream:
+                for line in stream.readlines():
+                    data += line;
+        except:
+            data = ""
+        return JsonResponse(code=200,data=data)
+
+    def post(self, request, *args, **kwargs):
+
+        data = request.POST.get('env')
+        env_file = "testcase/.env"
+        try:
+            file_obj = open(env_file, 'w')
+            file_obj.write(data)
+            file_obj.close()
+            return JsonResponse(code=200, data=data, msg="修改成功")
+        except:
+            return JsonResponse(code=500, msg="修改失败")

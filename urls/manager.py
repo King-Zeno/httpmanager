@@ -24,5 +24,6 @@ router.register('cate', api.APICateViewSet, basename='cate')
 
 
 urlpatterns = [
+    path('case/env/',case.TestCaseEnvView.as_view(),name='case-env'),
     re_path('^', include(router.urls)),
 ]
