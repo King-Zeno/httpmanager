@@ -10,7 +10,7 @@ class TestStepSerializer(serializers.ModelSerializer):
 
 
 class TestCaseSerializer(serializers.ModelSerializer):
-
+    project_name = serializers.CharField(source='project.name', read_only=True)
     class Meta:
         model = TestCase
         fields = '__all__'

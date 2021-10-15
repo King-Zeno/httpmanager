@@ -24,6 +24,23 @@ class TestCaseViewSet(CustomViewBase):
             return TestCaseListSerializer
         return TestCaseSerializer
 
+    def create(self, request, *args, **kwargs):
+        try: 
+            data = request.data.dict()
+        except:
+            data = request.data
+        username = "%s%s" % (request.user.last_name, request.user.first_name)
+        data['author'] = username
+        print(data)
+
+        serializer = self.get_serializer(data=data)
+        is_valid = serializer.is_valid(raise_exception=True)
+        if not is_valid:
+            return JsonResponse(code=400, msg=serializer.errors)
+
+        self.perform_create(serializer)
+        return JsonResponse(code=200, msg="success", data=serializer.data)
+
     @action(methods=['get'],detail=True)
     def run(self, request, *args, **kwargs):
         """

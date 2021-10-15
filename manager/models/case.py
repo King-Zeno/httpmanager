@@ -12,6 +12,7 @@ class TestCase(BaseTable):
     variables = models.JSONField(null=True, verbose_name="variables")
     parameters = models.JSONField(null=True, verbose_name="parameters")
     export = models.JSONField(null=True, verbose_name="export")
+    author = models.CharField(max_length=50, null=True, verbose_name="创建人")
 
     class Meta:
         verbose_name = "测试用例"
