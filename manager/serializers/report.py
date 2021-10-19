@@ -1,3 +1,4 @@
+from django.db.models import fields
 from rest_framework import serializers
 from manager.models.report import Report
 from rest_framework.validators import UniqueTogetherValidator
@@ -15,3 +16,9 @@ class ReportSerializer(serializers.ModelSerializer):
             )]
         model = Report
         fields = '__all__'
+
+class ReportListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Report
+        fields = ['id', 'path']
