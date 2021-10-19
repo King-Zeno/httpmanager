@@ -15,3 +15,4 @@ class Report(BaseTable):
     class Meta:
         verbose_name = "报告"
         db_table = 'report'
+        ordering = ['-create_time']
