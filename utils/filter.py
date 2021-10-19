@@ -36,7 +36,8 @@ class PlanFilter(FilterSet):
 
 class ReportFilter(FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
+    date = django_filters.CharFilter(field_name="create_time", lookup_expr='icontains')
 
     class Meta:
         model = Report
-        fields = ['name','plan','case']
+        fields = ['name','date','plan','case']
