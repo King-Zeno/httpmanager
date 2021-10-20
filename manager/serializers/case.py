@@ -4,7 +4,7 @@ from .report import ReportListSerializer
 
 class TestCaseSerializer(serializers.ModelSerializer):
     project_name = serializers.CharField(source='project.name', read_only=True)
-    report = ReportListSerializer(many=True, source="case_report")
+    report = ReportListSerializer(many=True, source="case_report", read_only=True)
     class Meta:
         model = TestCase
         fields = '__all__'
