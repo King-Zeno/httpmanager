@@ -7,6 +7,7 @@ import os
 import shutil
 import time
 from httprunner import report
+from utils import separator
 
 import requests
 from config import LOG_DIR, Config
@@ -93,8 +94,9 @@ class RunTestCase(object):
                 case_obj = TestCase.objects.get(pk=case_id)
                 data = self.json_format(env, case_id)
                 testcase_path, json_file = self.dump_json_file(project, data)
+                json_file_path = json_file.split('testcase'+ separator )[1]
 
-                step['testcase'] = json_file
+                step['testcase'] = json_file_path
                 step['output'] = case_obj.output
 
             for key in list(step.keys()):
