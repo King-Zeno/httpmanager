@@ -73,7 +73,7 @@ class RunTestCase(object):
         test_case['config']['name'] = serializer.data['name']
         test_case['config']['variables'] = serializer.data['variables']
         test_case['config']['base_url'] = env_obj.base_url
-        test_case['config']['export'] = serializer.data['export']
+        test_case['config']['output'] = serializer.data['output']
         test_case['config']['parameters'] = serializer.data['parameters']
 
         for key in list(test_case['config'].keys()):
@@ -84,14 +84,18 @@ class RunTestCase(object):
             del step['id']
             del step['sort']
             del step['case']
+            del step['include_case']
 
             # 用例引用
             if step['testcase']:
+                del step['request']
                 case_id = step['testcase']
+                case_obj = TestCase.objects.get(pk=case_id)
                 data = self.json_format(env, case_id)
                 testcase_path, json_file = self.dump_json_file(project, data)
 
                 step['testcase'] = json_file
+                step['output'] = case_obj.output
 
             for key in list(step.keys()):
                 if not step.get(key):
@@ -165,7 +169,7 @@ class RunTestCase(object):
             "log_file": log_file
         }
         runner = HttpRunner(**kwargs)
-        summary = runner.run(testcase_path)
+        summary = runner.run(json_file)
 
         report_path = self.add_test_reports(summary, report_name=case_obj.name)
         report_path = report_path.replace('\\','/')

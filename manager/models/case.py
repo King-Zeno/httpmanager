@@ -11,7 +11,7 @@ class TestCase(BaseTable):
                                 db_constraint=False, on_delete=models.CASCADE, verbose_name='关联项目')
     variables = models.JSONField(null=True, verbose_name="variables")
     parameters = models.JSONField(null=True, verbose_name="parameters")
-    export = models.JSONField(null=True, verbose_name="export")
+    output = models.JSONField(null=True, verbose_name="output")
     author = models.CharField(max_length=50, null=True, verbose_name="创建人")
 
     class Meta:
@@ -29,7 +29,7 @@ class TestStep(models.Model):
                                  db_constraint=False,  on_delete=models.SET_NULL, verbose_name="用例引用")
     extract = models.JSONField(null=True, verbose_name="提取数据")
     validate = models.JSONField(default=list, null=True, verbose_name="断言校验")
-    export = models.JSONField(null=True, verbose_name="export")
+    output = models.JSONField(null=True, verbose_name="output")
     sort = models.IntegerField(default=0, null=True, verbose_name="排序")
 
     class Meta:
