@@ -170,29 +170,40 @@ class RunTestCase(object):
             "log_level": self.log_level,
             "log_file": log_file
         }
-        runner = HttpRunner(**kwargs)
-        summary = runner.run(json_file)
+        results = {}
 
-        report_path = self.add_test_reports(summary, report_name=case_obj.name)
-        report_path = report_path.replace('\\','/')
+        try:
+            runner = HttpRunner(**kwargs)
+            summary = runner.run(json_file)
+            print(summary)
+            report_path = self.add_test_reports(summary, report_name=case_obj.name)
+            report_path = report_path.replace('\\','/')
 
-        # 保存到数据库
-        report_obj = Report.objects.filter(case=case_obj, path=report_path).first()
-        if report_obj:
-            report_obj.path = report_path
-            report_obj.save()
-        else:
-            Report.objects.create(
-                name = case_obj.name,
-                path = report_path,
-                case = case_obj
-            )
-            
+            # 保存到数据库
+            report_obj = Report.objects.filter(case=case_obj, path=report_path).first()
+            if report_obj:
+                report_obj.path = report_path
+                report_obj.save()
+            else:
+                Report.objects.create(
+                    name = case_obj.name,
+                    path = report_path,
+                    case = case_obj
+                )
+                
 
-        # 删除生成的工程目录
-        shutil.rmtree(testcase_path)
+            # 删除生成的工程目录
+            shutil.rmtree(testcase_path)
+            results['code'] = 200
+            results['data'] = report_path
+            results['msg'] = 'success'
+        except Exception as e:
+            print(e)
+            results['code'] = 500
+            results['data'] = ""
+            results['msg'] = "执行失败：%s" %e
 
-        return report_path
+        return results
 
 
 @shared_task()
@@ -222,28 +233,42 @@ def run_plan(plan_id, env):
         "log_level": log_level,
         "log_file": log_file
     }
-    runner = HttpRunner(**kwargs)
-    summary = runner.run_path(testcase_path)
 
-    # 删除生成的工程目录
-    shutil.rmtree(testcase_path)
-    report_path = RunTestCase().add_test_reports(summary, report_name=plan_obj.name)
-    report_path = report_path.replace('\\','/')
+    results = {}
 
-    # 保存到数据库
-    report_obj = Report.objects.filter(plan=plan_id, path=report_path).first()
-    
-    if  report_obj:
-        report_obj.path = report_path
-        report_obj.save()
-    else:
-        Report.objects.create(
-            name = plan_obj.name,
-            path = report_path,
-            plan = plan_obj
-        )
+    try:
+        runner = HttpRunner(**kwargs)
+        summary = runner.run_path(testcase_path)
 
-    return report_path
+        # 删除生成的工程目录
+        shutil.rmtree(testcase_path)
+        report_path = RunTestCase().add_test_reports(summary, report_name=plan_obj.name)
+        report_path = report_path.replace('\\','/')
+
+        # 保存到数据库
+        report_obj = Report.objects.filter(plan=plan_id, path=report_path).first()
+        
+        if  report_obj:
+            report_obj.path = report_path
+            report_obj.save()
+        else:
+            Report.objects.create(
+                name = plan_obj.name,
+                path = report_path,
+                plan = plan_obj
+            )
+
+        results['code'] = 200
+        results['data'] = report_path
+        results['msg'] = 'success'
+
+    except Exception as e:
+        print(e)
+        results['code'] = 500
+        results['data'] = ""
+        results['msg'] = "执行失败：%s" %e
+
+    return results
 
 
 # 导入接口数据

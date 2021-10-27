@@ -50,9 +50,9 @@ class TestCaseViewSet(CustomViewBase):
         # env = request.data['env']
         env = request.GET.get('env')
         
-        report_path = RunTestCase().run_case(env=env, case_id=object.id)
+        results = RunTestCase().run_case(env=env, case_id=object.id)
 
-        return JsonResponse(code=200, data=report_path)
+        return JsonResponse(code=results['code'], data=results['data'], msg=results['msg'])
 
 
 class TestStepViewSet(NestedViewSetMixin, CustomViewBase):
