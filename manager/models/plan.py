@@ -22,7 +22,7 @@ class PlanCase(models.Model):
     plan = models.ForeignKey(Plan, related_name='plan_case',
                             db_constraint=False, verbose_name='关联计划', on_delete=models.CASCADE,)
     case = models.ForeignKey(TestCase, related_name='case_testcase',
-                             on_delete=models.RESTRICT, db_constraint=False, verbose_name='测试用例')
+                             on_delete=models.CASCADE, db_constraint=False, verbose_name='测试用例')
 
     class Meta:
         verbose_name = "用例对应计划"

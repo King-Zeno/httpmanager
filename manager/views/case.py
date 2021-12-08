@@ -64,6 +64,13 @@ class TestStepViewSet(NestedViewSetMixin, CustomViewBase):
 
         return queryset
 
+    @action(methods=['get'],detail=True)
+    def copy(self, request, *args, **kwargs):
+        object = self.get_object()
+        object.pk= None
+        object.save()
+        return JsonResponse(code=200, msg="success")
+
 
 class TestCaseEnvView(APIView):
 
