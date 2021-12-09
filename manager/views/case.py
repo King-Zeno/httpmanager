@@ -54,6 +54,22 @@ class TestCaseViewSet(CustomViewBase):
 
         return JsonResponse(code=results['code'], data=results['data'], msg=results['msg'])
 
+    @action(methods=['get'],detail=True)
+    def copy(self, request, *args, **kwargs):
+        case = self.get_object()
+        case_step = TestStep.objects.filter(case=case.id)
+        try:
+            case.pk= None
+            case.name = "%s-copy" %case.name
+            case.save()
+            for step in case_step:
+                step.pk = None
+                step.case = case
+                step.save()        
+            return JsonResponse(code=200, msg="success")
+        except Exception as e:
+            return JsonResponse(code=500, msg="Error: %s" %e)
+
 
 class TestStepViewSet(NestedViewSetMixin, CustomViewBase):
     serializer_class = TestStepSerializer
